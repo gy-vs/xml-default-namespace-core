@@ -1,2 +1,13 @@
-export type QName={prefix:string;local:string;uri:string};
-export class NamespaceStack{#frames:Record<string,string>[]=[{}];start(declarations:Record<string,string>){this.#frames.push({...this.#frames.at(-1),...declarations})}end(){if(this.#frames.length>1)this.#frames.pop()}resolve(name:string,attribute=false):QName{const [prefix='',local=name]=name.includes(':')?name.split(':',2):['',name];const uri=this.#frames.at(-1)?.[prefix]??'';return {prefix,local,uri:attribute?uri:uri}}}
+/**
+ * @file Public entry point.
+ *
+ * A small, dependency-free, namespace-aware streaming XML parser.
+ * Feed arbitrary network chunks to {@link SaxParser#write}; the parser emits
+ * document events as soon as data becomes available and keeps memory bounded
+ * regardless of document size.
+ */
+
+export {SaxParser, type SaxOptions, type SaxHandlers, type QName, type Attribute} from './parser.js';
+export {NamespaceContext, XML_NS_URI, XMLNS_NS_URI} from './nscontext.js';
+export {Chunker} from './chunk.js';
+export {SaxError} from './errors.js';
